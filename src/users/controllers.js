@@ -27,13 +27,25 @@ const getAllUsers = async (req, res) => {
 
 const login = async (req, res) => {
   try {
+    if (req.authCheck) {
+      const user = {
+        id: req.authCheck.id,
+        username: req.authCheck.username,
+      };
+
+      res
+        .status(201)
+        .json({ message: "persistant login successful", user: user });
+      return;
+    }
+
     const token = await jwt.sign({ id: req.user.id }, process.env.SECRET);
 
     console.log(token);
 
     const user = {
       id: req.user.id,
-      usernam: req.user.username,
+      username: req.user.username,
       token: token,
     };
 
