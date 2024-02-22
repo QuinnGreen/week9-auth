@@ -7,7 +7,7 @@ const { signupUser, login, getAllUsers } = require("./controllers");
 
 userRouter.post("/users/signup", hashPass, signupUser);
 
-userRouter.get("/users/getAllUsers", getAllUsers);
+userRouter.get("/users/getAllUsers", tokenCheck, getAllUsers);
 
 userRouter.post("/users/login", comparePass, login);
 

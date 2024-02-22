@@ -16,6 +16,10 @@ const signupUser = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   try {
+    if (!req.authCheck) {
+      res.status(401).json({ message: "Not logged in" });
+      return;
+    }
     const user = await User.findAll({});
 
     //   console.log(user);
