@@ -62,8 +62,52 @@ const login = async (req, res) => {
     res.status(501).json({ message: error.message, error: error });
   }
 };
+
+const updateEmail = async (req, res) => {
+  try {
+    const username = req.body.username;
+    const updatedEmail = req.body.email;
+
+    // Find the user
+    const user = await User.findOne({ where: { username: username } });
+
+    if (!user) {
+      return res.status(404).send({ message: "Error: User not found" });
+    }
+
+    // Update the email
+    await user.update({ email: updatedEmail });
+
+    res.send({ message: "Success: Email updated", user: user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Error: Unable to update email" });
+  }
+};
+const deleteUser = async (req, res) => {
+  try {
+    const username = req.body.username;
+
+    // Find the user
+    const userToDelete = await User.findOne({ where: { username: username } });
+
+    if (!userToDelete) {
+      return res.status(404).send({ message: "Error: user not found" });
+    }
+
+    // Delete the user
+    await userToDelete.destroy();
+
+    res.send({ message: "Success: user deleted", user: userToDelete });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Error: Unable to delete user" });
+  }
+};
 module.exports = {
   signupUser: signupUser,
   getAllUsers: getAllUsers,
   login: login,
+  updateEmail: updateEmail,
+  deleteUser: deleteUser,
 };
